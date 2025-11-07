@@ -1,23 +1,35 @@
-import logo from './logo.svg';
 import './App.css';
+import Header from './Components/Header';
+import { useState, useEffect } from 'react';
 
 function App() {
+  const [count, setCount] = useState(0);  
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    async function getData() {
+      const response = await fetch('https://dummyjson.com/products');
+      const data = await response.json();
+      setData(data.products);
+    }
+    getData();
+    document.title = `active items: ${count}`
+  }, [count]);
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+     
+      <div className= "product-grid"
+      >{data.map((item, index) => (<>
+          <div className='product-card' key={item.id}>
+            <h2>{item.title}</h2>
+            <p>{item.description}</p>
+            <p>{item.price}</p>
+            <p>{item.category}</p>
+            <img src={item.thumbnail} alt={item.title} />
+          </div>
+        </>))}  
+      </div>
     </div>
   );
 }
