@@ -1,36 +1,28 @@
 import './App.css';
 import Header from './Components/Header';
-import { useState, useEffect } from 'react';
+import { BrowserRouter as Router } from "react-router-dom";
+import Products from './Components/Products';
+import Navbar from './Components/Navbar';
+import { Route, Routes } from "react-router-dom";
+import Home from './Components/Home';
+import About from './Components/About';
 
 function App() {
-  const [count, setCount] = useState(0);  
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    async function getData() {
-      const response = await fetch('https://dummyjson.com/products');
-      const data = await response.json();
-      setData(data.products);
-    }
-    getData();
-    document.title = `active items: ${count}`
-  }, [count]);
+  
   
   return (
+    <Router>
     <div className="App">
       <Header />
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="about" element={<About />} />
+        <Route path="Products" element={<Products />} />
+      </Routes>
      
-      <div className= "product-grid"
-      >{data.map((item, index) => (<>
-          <div className='product-card' key={item.id}>
-            <h2>{item.title}</h2>
-            <p>{item.description}</p>
-            <p>{item.price}</p>
-            <p>{item.category}</p>
-            <img src={item.thumbnail} alt={item.title} />
-          </div>
-        </>))}  
-      </div>
     </div>
+    </Router>
   );
 }
 
